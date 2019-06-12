@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.15.1/dist/phaser-arcade-physics.min.js"></script>
+</head>
+
+<body>
+
+    <script>
+        var config = {
+            type: Phaser.AUTO,
+            width: 600,
+            height: 600,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 200 }
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var game = new Phaser.Game(config);
+        var gameState = [[0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]];
+
+        function preload() {
+            this.load.image('x', 'assets/x.png');
+            this.load.image('o', 'assets/o.png');
+            this.load.image('background', 'assets/background.png');
+        }
+
+        function create() {
+            var board = this.add.image(300, 300, 'background');
+            // var x =  this.add.image(300, 300, 'x');
+
+            // this.input.on('pointerdown', function (pointer) {
+            //     this.add.image(pointer.x, pointer.y, 'x');
+            // }, this);
+
+            //board zones
+            var zone1 = this.add.zone(100, 100, 200, 200).setName('TopLeft').setInteractive();
+            var zone2 = this.add.zone(300, 100, 200, 200).setName('Top').setInteractive();
+            var zone3 = this.add.zone(500, 100, 200, 200).setName('TopRight').setInteractive();
+
+            var zone4 = this.add.zone(100, 300, 200, 200).setName('Left').setInteractive();
+            var zone5 = this.add.zone(300, 300, 200, 200).setName('Middle').setInteractive();
+            var zone6 = this.add.zone(500, 300, 200, 200).setName('Right').setInteractive();
+
+            var zone7 = this.add.zone(100, 500, 200, 200).setName('BottomLeft').setInteractive();
+            var zone8 = this.add.zone(300, 500, 200, 200).setName('Bottom').setInteractive();
+            var zone9 = this.add.zone(500, 500, 200, 200).setName('bottomRight').setInteractive();
+
+            this.input.on('gameobjectdown', function (pointer, gameObject) {
+                this.add.image(gameObject.x, gameObject.y, 'x');
+            }, this)
+
+        }
+
+        function update() {
+
+        }
+
+    </script>
+
+</body>
+
+</html>
