@@ -20,8 +20,7 @@
             },
             scene: {
                 preload: preload,
-                create: create,
-                update: update
+                create: create
             }
         };
 
@@ -53,27 +52,30 @@
             var zone8 = this.add.zone(300, 500, 200, 200).setName('Bottom').setInteractive();
             var zone9 = this.add.zone(500, 500, 200, 200).setName('BottomRight').setInteractive();
 
+            //Zone states determine if the space is empty or filled. All start empty
             zone1.state = zone2.state = zone3.state = zone4.state = zone5.state = zone6.state = zone7.state = zone8.state = zone9.state = 0
 
             this.input.on('gameobjectdown', function (pointer, gameObject) {
                 if (gameObject.state == 0) {
+                    //render piece
                     this.add.image(gameObject.x, gameObject.y, turn == 1 ? 'x' : 'o');
 
+                    // update state and check win condition                                    
                     if (updateGameState(gameObject, turn)) {
-                        turn == 1 ? alert('X WINS') : alert('O WINS');
+                        let doAlert = () => { alert(turn == 1 ? 'X WINS' : 'O WINS') }
+                        setTimeout(doAlert, 500)
                     }
 
+                    //Mark zone filled so we can no longer place a piece there
                     gameObject.state = 1;
 
+                    //Switch turns
                     turn == 1 ? turn = 2 : turn = 1;
                 }
             }, this)
         }
 
-        function update() {
-
-        }
-
+        // This function serves to update the array holding the game state, as well as returns true when a victory condition is met
         function updateGameState(gameObject, turn) {
             if (gameObject.name == 'TopLeft') {
                 gameState[0][0] = turn == 1 ? 1 : 2;
