@@ -110,7 +110,7 @@
             }
             else if (gameObject.name == 'Left') {
                 gameState[1][0] = turn == 1 ? 1 : 2;
-                if (gameState[1][1] == turn && gameState[2][1] == turn ||
+                if (gameState[1][1] == turn && gameState[1][2] == turn ||
                     gameState[0][0] == turn && gameState[2][0] == turn) {
                     return true;
                 }
