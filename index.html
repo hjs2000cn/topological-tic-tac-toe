@@ -20,7 +20,8 @@
             },
             scene: {
                 preload: preload,
-                create: create
+                create: create,
+                update: update
             }
         };
 
@@ -29,6 +30,9 @@
         [0, 0, 0],
         [0, 0, 0]];
         var turn = 1;
+        var images = [];
+        var zones = [];
+        var gameOver = false;
 
         function preload() {
             this.load.image('x', 'assets/x.png');
@@ -40,30 +44,34 @@
             var board = this.add.image(300, 300, 'background');
 
             //board zones
-            var zone1 = this.add.zone(100, 100, 200, 200).setName('TopLeft').setInteractive();
-            var zone2 = this.add.zone(300, 100, 200, 200).setName('Top').setInteractive();
-            var zone3 = this.add.zone(500, 100, 200, 200).setName('TopRight').setInteractive();
+            zones.push(this.add.zone(100, 100, 200, 200).setName('TopLeft').setInteractive());
+            zones.push(this.add.zone(300, 100, 200, 200).setName('Top').setInteractive());
+            zones.push(this.add.zone(500, 100, 200, 200).setName('TopRight').setInteractive());
 
-            var zone4 = this.add.zone(100, 300, 200, 200).setName('Left').setInteractive();
-            var zone5 = this.add.zone(300, 300, 200, 200).setName('Middle').setInteractive();
-            var zone6 = this.add.zone(500, 300, 200, 200).setName('Right').setInteractive();
+            zones.push(this.add.zone(100, 300, 200, 200).setName('Left').setInteractive());
+            zones.push(this.add.zone(300, 300, 200, 200).setName('Middle').setInteractive());
+            zones.push(this.add.zone(500, 300, 200, 200).setName('Right').setInteractive());
 
-            var zone7 = this.add.zone(100, 500, 200, 200).setName('BottomLeft').setInteractive();
-            var zone8 = this.add.zone(300, 500, 200, 200).setName('Bottom').setInteractive();
-            var zone9 = this.add.zone(500, 500, 200, 200).setName('BottomRight').setInteractive();
+            zones.push(this.add.zone(100, 500, 200, 200).setName('BottomLeft').setInteractive());
+            zones.push(this.add.zone(300, 500, 200, 200).setName('Bottom').setInteractive());
+            zones.push(this.add.zone(500, 500, 200, 200).setName('BottomRight').setInteractive());
 
             //Zone states determine if the space is empty or filled. All start empty
-            zone1.state = zone2.state = zone3.state = zone4.state = zone5.state = zone6.state = zone7.state = zone8.state = zone9.state = 0
+            for (var i = 0; i < zones.length; i++) {
+                zones[i].state = 0;
+            }
 
             this.input.on('gameobjectdown', function (pointer, gameObject) {
                 if (gameObject.state == 0) {
                     //render piece
-                    this.add.image(gameObject.x, gameObject.y, turn == 1 ? 'x' : 'o');
+                    images.push(this.add.image(gameObject.x, gameObject.y, turn == 1 ? 'x' : 'o'));
 
                     // update state and check win condition                                    
                     if (updateGameState(gameObject, turn)) {
-                        let doAlert = () => { alert(turn == 1 ? 'X WINS' : 'O WINS') }
+                        let doAlert = () => { alert(turn == 1 ? 'O WINS' : 'X WINS') }
                         setTimeout(doAlert, 500)
+
+                        gameOver = true;
                     }
 
                     //Mark zone filled so we can no longer place a piece there
@@ -146,6 +154,30 @@
                     return true;
                 }
             }
+        }
+
+        function update() {
+            if (gameOver) {
+                let restart = () => { restartGame() }
+                setTimeout(restart, 500)
+            }
+        }
+
+        function restartGame() {
+            gameState = [[0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]];
+
+            turn = 1;
+
+            for (var i = 0; i < images.length; i++) {
+                images[i].destroy();
+            }
+
+            for (var i = 0; i < zones.length; i++) {
+                zones[i].state = 0;
+            }
+            gameOver = false;
         }
 
     </script>
