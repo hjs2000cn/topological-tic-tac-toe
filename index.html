@@ -73,8 +73,7 @@
 
                         gameOver = true;
                     }
-
-                    if (checkGameDraw()){
+                    else if (checkGameDraw()){
                         let doAlert = () => { alert("Board is filled, draw")}
                         setTimeout(doAlert, 500)
 
