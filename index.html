@@ -74,6 +74,13 @@
                         gameOver = true;
                     }
 
+                    if (checkGameDraw()){
+                        let doAlert = () => { alert("Board is filled, draw")}
+                        setTimeout(doAlert, 500)
+
+                        gameOver = true;
+                    }
+
                     //Mark zone filled so we can no longer place a piece there
                     gameObject.state = 1;
 
@@ -96,7 +103,7 @@
             else if (gameObject.name == 'Top') {
                 gameState[0][1] = turn == 1 ? 1 : 2;
                 if (gameState[0][0] == turn && gameState[0][2] == turn ||
-                    gameState[1][1] == turn && gameState[1][2] == turn) {
+                    gameState[1][1] == turn && gameState[2][1] == turn) {
                     return true;
                 }
             }
@@ -154,6 +161,15 @@
                     return true;
                 }
             }
+        }
+
+        //Checks if the game ends up in a draw
+        function checkGameDraw(){
+            if (gameState[0][0] != 0 && gameState[0][1] != 0 && gameState[0][2] != 0 && 
+                gameState[1][0] != 0 && gameState[1][1] != 0 && gameState[1][2] != 0 && 
+                gameState[2][0] != 0 && gameState[2][1] != 0 && gameState[2][2] != 0 
+            )
+            return true;
         }
 
         function update() {
